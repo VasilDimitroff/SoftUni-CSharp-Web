@@ -25,9 +25,7 @@ namespace SharedTrip.Controllers
             if (string.IsNullOrWhiteSpace(input.EndPoint))
             {
                 return this.Error("End Point cannot be empty or whitespace");
-            }
-
-            
+            } 
 
             return this.View();
         }

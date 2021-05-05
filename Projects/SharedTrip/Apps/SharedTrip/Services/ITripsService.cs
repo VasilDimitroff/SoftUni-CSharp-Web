@@ -1,11 +1,12 @@
-﻿using System;
+﻿using SharedTrip.ViewModels;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SharedTrip.Services
 {
-    public class ITripsService
+    public interface ITripsService
     {
-        void Add(string startPoint, string endPoint, DateT)
+        void Add(string startPoint, string endPoint);
+
+        IEnumerable<TripViewModel> All();
     }
 }
