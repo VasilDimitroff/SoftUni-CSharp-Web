@@ -1,0 +1,90 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+namespace SharedTrip.Migrations
+{
+    public partial class IntialCreate : Migration
+    {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "Trips",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    StartPoint = table.Column<string>(nullable: false),
+                    EndPoint = table.Column<string>(nullable: false),
+                    DepartureTime = table.Column<DateTime>(nullable: false),
+                    Seats = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(maxLength: 80, nullable: false),
+                    ImagePath = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Trips", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Username = table.Column<string>(maxLength: 20, nullable: false),
+                    Email = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(maxLength: 20, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UsersTrips",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(nullable: false),
+                    TripId = table.Column<int>(nullable: false),
+                    UserId1 = table.Column<string>(nullable: true),
+                    TripId1 = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UsersTrips", x => new { x.UserId, x.TripId });
+                    table.ForeignKey(
+                        name: "FK_UsersTrips_Trips_TripId1",
+                        column: x => x.TripId1,
+                        principalTable: "Trips",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UsersTrips_Users_UserId1",
+                        column: x => x.UserId1,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersTrips_TripId1",
+                table: "UsersTrips",
+                column: "TripId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersTrips_UserId1",
+                table: "UsersTrips",
+                column: "UserId1");
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "UsersTrips");
+
+            migrationBuilder.DropTable(
+                name: "Trips");
+
+            migrationBuilder.DropTable(
+                name: "Users");
+        }
+    }
+}
