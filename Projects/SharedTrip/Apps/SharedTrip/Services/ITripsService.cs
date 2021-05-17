@@ -5,8 +5,8 @@ namespace SharedTrip.Services
 {
     public interface ITripsService
     {
-        void Add(string startPoint, string endPoint);
+        void Add(TripInputModel inputTrip);
 
-        IEnumerable<TripViewModel> All();
+        public IEnumerable<TripViewModel> All();
     }
 }
