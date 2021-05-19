@@ -48,11 +48,29 @@ namespace SharedTrip.Services
                 StartingPoint = trip.StartPoint,
                 ImagePath = trip.ImagePath,
                 Seats = trip.Seats,
-                UsedSeats = trip.UserTrips.Count
+                UsedSeats = trip.UserTrips.Count,
             })
                 .ToList();
 
             return trips;
+        }
+
+        public TripViewModel GetTripById(string id)
+        {
+            var trip = db.Trips.Select(x => new TripViewModel
+            {
+                Id = x.Id,
+                DepartureTime = x.DepartureTime.ToString(),
+                Description = x.Description,
+                EndPoint = x.EndPoint,
+                StartingPoint = x.StartPoint,
+                ImagePath = x.ImagePath,
+                Seats = x.Seats,
+                UsedSeats = x.UserTrips.Count,
+            })
+                .FirstOrDefault(x => x.Id == id);
+
+            return trip;
         }
     }
 }

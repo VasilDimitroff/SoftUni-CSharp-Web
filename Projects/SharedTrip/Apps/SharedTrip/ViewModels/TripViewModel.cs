@@ -10,6 +10,7 @@ namespace SharedTrip.ViewModels
         public string StartingPoint { get; set; }
         public string EndPoint { get; set; }
         public string DepartureTime { get; set; }
+        public string DepartureTimeAsString => this.DepartureTime.ToString();
         public string ImagePath { get; set; }
         public int Seats { get; set; }
         public int AvailableSeats => this.Seats - this.UsedSeats;
