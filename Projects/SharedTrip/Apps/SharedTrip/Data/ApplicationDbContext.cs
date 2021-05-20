@@ -17,7 +17,7 @@
 
         public DbSet<Trip> Trips  { get; set; }
 
-        public DbSet<UserTrip> UsersTrips { get; set; }
+       public DbSet<UserTrip> UsersTrips { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -29,12 +29,23 @@
 
             base.OnConfiguring(optionsBuilder);
         }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserTrip>().HasKey(x => new { x.UserId, x.TripId });
-
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<UserTrip>().HasKey(x => new { x.TripId, x.UserId });
+
+            modelBuilder.Entity<UserTrip>()
+               .HasOne(t => t.User)
+               .WithMany(s => s.UserTrips)
+               .HasForeignKey(x => x.UserId);
+
+            modelBuilder.Entity<UserTrip>()
+              .HasOne(t => t.Trip)
+              .WithMany(s => s.UserTrips)
+              .HasForeignKey(x => x.TripId);
+
         }
     }
 }

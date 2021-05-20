@@ -76,23 +76,15 @@ namespace SharedTrip.Migrations
 
             modelBuilder.Entity("SharedTrip.Data.UserTrip", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TripId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TripId1")
+                    b.Property<string>("TripId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("UserId", "TripId");
+                    b.HasKey("TripId", "UserId");
 
-                    b.HasIndex("TripId1");
-
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UsersTrips");
                 });
@@ -101,11 +93,15 @@ namespace SharedTrip.Migrations
                 {
                     b.HasOne("SharedTrip.Data.Trip", "Trip")
                         .WithMany("UserTrips")
-                        .HasForeignKey("TripId1");
+                        .HasForeignKey("TripId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SharedTrip.Data.User", "User")
                         .WithMany("UserTrips")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

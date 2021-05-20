@@ -72,5 +72,29 @@ namespace SharedTrip.Services
 
             return trip;
         }
+
+        public void AddUserToTrip(string userId, string tripId)
+        {
+            User user = db.Users.FirstOrDefault(x => x.Id == userId);
+
+            Trip trip = db.Trips.FirstOrDefault(x => x.Id == tripId);
+
+            if (user.UserTrips.Any(x => x.TripId == tripId))
+            {
+                return;
+            }
+
+            UserTrip userTrip = new UserTrip
+            {
+                User = user,
+                Trip = trip
+            };
+
+            user.UserTrips.Add(userTrip);
+
+            db.SaveChanges();
+
+            return;
+        }
     }
 }

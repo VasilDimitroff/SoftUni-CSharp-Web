@@ -10,8 +10,8 @@ using SharedTrip.Data;
 namespace SharedTrip.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210503191314_updat-database")]
-    partial class updatdatabase
+    [Migration("20210520044840_CreateNewDatabase")]
+    partial class CreateNewDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -78,23 +78,15 @@ namespace SharedTrip.Migrations
 
             modelBuilder.Entity("SharedTrip.Data.UserTrip", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TripId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TripId1")
+                    b.Property<string>("TripId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("UserId", "TripId");
+                    b.HasKey("TripId", "UserId");
 
-                    b.HasIndex("TripId1");
-
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UsersTrips");
                 });
@@ -103,11 +95,15 @@ namespace SharedTrip.Migrations
                 {
                     b.HasOne("SharedTrip.Data.Trip", "Trip")
                         .WithMany("UserTrips")
-                        .HasForeignKey("TripId1");
+                        .HasForeignKey("TripId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SharedTrip.Data.User", "User")
                         .WithMany("UserTrips")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

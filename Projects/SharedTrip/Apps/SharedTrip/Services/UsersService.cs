@@ -20,6 +20,7 @@ namespace SharedTrip.Services
         {
             User user = new User()
             {
+                Id = Guid.NewGuid().ToString(),
                 Username = username,
                 Email = email,
                 Password = ComputeHash(password)

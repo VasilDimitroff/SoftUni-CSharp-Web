@@ -1,13 +1,17 @@
-﻿namespace SharedTrip.Data
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SharedTrip.Data
 {
     public class UserTrip
     {
-        public int UserId { get; set; }
+        [Required]
+        public string UserId { get; set; }
 
         public virtual User User { get; set; }
 
-        public int TripId { get; set; }
+        [Required]
+        public string TripId { get; set; }
 
-        public Trip Trip { get; set; }
+        public virtual Trip Trip { get; set; }
     }
 }

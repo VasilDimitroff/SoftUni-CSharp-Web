@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SharedTrip.Migrations
 {
-    public partial class IntialCreate : Migration
+    public partial class CreateNewDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,7 +31,7 @@ namespace SharedTrip.Migrations
                     Id = table.Column<string>(nullable: false),
                     Username = table.Column<string>(maxLength: 20, nullable: false),
                     Email = table.Column<string>(nullable: false),
-                    Password = table.Column<string>(maxLength: 20, nullable: false)
+                    Password = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,37 +42,30 @@ namespace SharedTrip.Migrations
                 name: "UsersTrips",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false),
-                    TripId = table.Column<int>(nullable: false),
-                    UserId1 = table.Column<string>(nullable: true),
-                    TripId1 = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: false),
+                    TripId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UsersTrips", x => new { x.UserId, x.TripId });
+                    table.PrimaryKey("PK_UsersTrips", x => new { x.TripId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_UsersTrips_Trips_TripId1",
-                        column: x => x.TripId1,
+                        name: "FK_UsersTrips_Trips_TripId",
+                        column: x => x.TripId,
                         principalTable: "Trips",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_UsersTrips_Users_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_UsersTrips_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsersTrips_TripId1",
+                name: "IX_UsersTrips_UserId",
                 table: "UsersTrips",
-                column: "TripId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UsersTrips_UserId1",
-                table: "UsersTrips",
-                column: "UserId1");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
