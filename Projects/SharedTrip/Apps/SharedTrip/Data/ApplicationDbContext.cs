@@ -13,39 +13,39 @@
         {
         }
 
-        public DbSet<User> Users  { get; set; }
-
-        public DbSet<Trip> Trips  { get; set; }
-
-       public DbSet<UserTrip> UsersTrips { get; set; }
-
+        public DbSet<User> Users { get; set; }
+        public DbSet<Trip> Trips { get; set; }
+        public DbSet<UserTrip> UsersTrips { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=.;Database=SharedTrip;Integrated Security=true;");
+                optionsBuilder.UseSqlServer("Server=.;Database=SharedTrip;Integrated Security=True");
             }
 
             base.OnConfiguring(optionsBuilder);
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<UserTrip>().HasKey(x => new { x.TripId, x.UserId });
+            modelBuilder
+                .Entity<UserTrip>()
+                .HasOne(u => u.User)
+                .WithMany(u => u.UserTrips)
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<UserTrip>()
-               .HasOne(t => t.User)
-               .WithMany(s => s.UserTrips)
-               .HasForeignKey(x => x.UserId);
+            modelBuilder
+               .Entity<UserTrip>()
+               .HasOne(u => u.Trip)
+               .WithMany(u => u.TripUsers)
+               .HasForeignKey(u => u.TripId)
+               .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<UserTrip>()
-              .HasOne(t => t.Trip)
-              .WithMany(s => s.UserTrips)
-              .HasForeignKey(x => x.TripId);
-
+            modelBuilder.Entity<UserTrip>().HasKey(x => new { x.UserId, x.TripId });
         }
     }
 }

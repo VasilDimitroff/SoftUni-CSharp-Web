@@ -29,8 +29,7 @@ namespace SharedTrip.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(80)")
-                        .HasMaxLength(80);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EndPoint")
                         .IsRequired()
@@ -66,8 +65,7 @@ namespace SharedTrip.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)")
-                        .HasMaxLength(20);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -76,15 +74,15 @@ namespace SharedTrip.Migrations
 
             modelBuilder.Entity("SharedTrip.Data.UserTrip", b =>
                 {
-                    b.Property<string>("TripId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("TripId", "UserId");
+                    b.Property<string>("TripId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasIndex("UserId");
+                    b.HasKey("UserId", "TripId");
+
+                    b.HasIndex("TripId");
 
                     b.ToTable("UsersTrips");
                 });
@@ -92,15 +90,15 @@ namespace SharedTrip.Migrations
             modelBuilder.Entity("SharedTrip.Data.UserTrip", b =>
                 {
                     b.HasOne("SharedTrip.Data.Trip", "Trip")
-                        .WithMany("UserTrips")
+                        .WithMany("TripUsers")
                         .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SharedTrip.Data.User", "User")
                         .WithMany("UserTrips")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

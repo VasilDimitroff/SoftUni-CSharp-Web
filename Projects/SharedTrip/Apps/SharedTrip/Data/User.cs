@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 namespace SharedTrip.Data
 {
     public class User
     {
-        [Required]
-        public string Id { get; set; } = new Guid().ToString();
+        public User()
+        {
+            this.UserTrips = new HashSet<UserTrip>();
+        }
 
         [Required]
-        [MinLength(5)]
-        [MaxLength(20)]
+        public string Id { get; set; }
+
+        [Required]
         public string Username { get; set; }
 
         [Required]
@@ -21,7 +24,6 @@ namespace SharedTrip.Data
         [Required]
         public string Password { get; set; }
 
-        public virtual ICollection<UserTrip> UserTrips { get; set; } = new HashSet<UserTrip>();
-
+        public virtual ICollection<UserTrip> UserTrips { get; set; }
     }
 }

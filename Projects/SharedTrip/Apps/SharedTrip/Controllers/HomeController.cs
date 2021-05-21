@@ -1,6 +1,5 @@
 ﻿namespace SharedTrip.Controllers
 {
-    using SharedTrip.Data;
     using SUS.HTTP;
     using SUS.MvcFramework;
 
@@ -13,6 +12,7 @@
             {
                 return this.Redirect("/Trips/All");
             }
+
             return this.View();
         }
     }

@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 namespace SharedTrip.Data
 {
     public class Trip
     {
+        public Trip()
+        {
+            this.TripUsers = new HashSet<UserTrip>();
+        }
+
         [Required]
-        public string Id { get; set; } = new Guid().ToString();
+        public string Id { get; set; }
 
         [Required]
         public string StartPoint { get; set; }
@@ -17,16 +22,14 @@ namespace SharedTrip.Data
         public string EndPoint { get; set; }
 
         public DateTime DepartureTime { get; set; }
-        
-        [Range(2, 6)]
+
         public int Seats { get; set; }
 
         [Required]
-        [MaxLength(80)]
         public string Description { get; set; }
 
         public string ImagePath { get; set; }
 
-        public virtual ICollection<UserTrip> UserTrips { get; set; } = new HashSet<UserTrip>();
+        public virtual ICollection<UserTrip> TripUsers { get; set; }
     }
 }

@@ -25,21 +25,15 @@ namespace SharedTrip.Controllers
         [HttpPost]
         public HttpResponse Login(LoginInputModel inputModel)
         {
-            string userId = usersService.GetUserId(inputModel.Username, inputModel.Password);
+            var user = this.usersService.GetUserId(inputModel.Username, inputModel.Password);
+            this.SignIn(user);
 
-            if (userId == null)
-            {
-                return this.Error("Username and password do not match");
-            }
-
-            this.SignIn(userId);
-            
             return this.Redirect("/Trips/All");
         }
 
         public HttpResponse Logout()
         {
-             this.SignOut();
+            this.SignOut();
             return this.Redirect("/");
         }
 
@@ -61,7 +55,7 @@ namespace SharedTrip.Controllers
                 return this.Error("Invalid email!");
             }
 
-            if (input.Password.Length < 6 ||  input.Password.Length > 20 || string.IsNullOrWhiteSpace(input.Password))
+            if (input.Password.Length < 6 || input.Password.Length > 20 || string.IsNullOrWhiteSpace(input.Password))
             {
                 return this.Error("Password must be between 6 and 20 symbols");
             }
@@ -83,7 +77,7 @@ namespace SharedTrip.Controllers
             }
 
             usersService.Create(input.Username, input.Email, input.Password);
-            
+
             return this.Redirect("/Users/Login");
         }
     }

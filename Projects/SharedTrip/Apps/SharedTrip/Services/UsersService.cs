@@ -9,59 +9,43 @@ namespace SharedTrip.Services
 {
     public class UsersService : IUsersService
     {
-        private readonly ApplicationDbContext db;
+        private readonly ApplicationDbContext dbContext;
 
-        public UsersService(ApplicationDbContext db)
+        public UsersService(ApplicationDbContext dbContext)
         {
-            this.db = db;
+            this.dbContext = dbContext;
         }
 
         public void Create(string username, string email, string password)
         {
-            User user = new User()
+            var user = new User()
             {
                 Id = Guid.NewGuid().ToString(),
-                Username = username,
                 Email = email,
-                Password = ComputeHash(password)
+                Password = ComputeHash(password),
+                Username = username
             };
 
-            db.Users.Add(user);
-            db.SaveChanges();
-        }
-
-        public bool IsEmailAvailable(string email)
-        {
-            var targetEmail = db.Users.FirstOrDefault(x => x.Email == email);
-
-            if (targetEmail == null)
-            {
-                return true;
-            }
-
-            return false;
+            dbContext.Users.Add(user);
+            dbContext.SaveChanges();
         }
 
         public string GetUserId(string username, string password)
         {
-            var hashPassword = ComputeHash(password);
-
-            var user = db.Users
-                .FirstOrDefault(u => u.Username == username && u.Password == hashPassword);
+            var user = this.dbContext.Users
+                .FirstOrDefault(u => u.Username == username && u.Password == ComputeHash(password));
 
             return user?.Id;
         }
 
+        public bool IsEmailAvailable(string email)
+        {
+            return !this.dbContext.Users.Any(u => u.Email == email);
+        }
+
         public bool IsUsernameAvailable(string username)
         {
-            var targetUsername = db.Users.FirstOrDefault(u => u.Username == username);
-
-            if (targetUsername == null)
-            {
-                return true;
-            }
-
-            return false;
+            return !this.dbContext.Users.Any(u => u.Username == username);
         }
 
         private static string ComputeHash(string input)
