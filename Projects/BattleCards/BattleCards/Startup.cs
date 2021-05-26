@@ -1,11 +1,11 @@
-﻿namespace SharedTrip
+﻿namespace BattleCards
 {
+    using System.Collections.Generic;
+    using BattleCards.Data;
     using Microsoft.EntityFrameworkCore;
-    using SharedTrip.Data;
     using SharedTrip.Services;
     using SUS.HTTP;
     using SUS.MvcFramework;
-    using System.Collections.Generic;
 
     public class Startup : IMvcApplication
     {
@@ -17,7 +17,6 @@
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
             serviceCollection.Add<IUsersService, UsersService>();
-            serviceCollection.Add<ITripsService, TripsService>();
         }
     }
 }
