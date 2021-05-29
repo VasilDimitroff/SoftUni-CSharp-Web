@@ -19,6 +19,16 @@ namespace SharedTrip.Services
 
         public void Create(string username, string email, string password)
         {
+            if (!IsUsernameAvailable(username))
+            {
+                return;
+            }
+
+            if (!IsEmailAvailable(email))
+            {
+                return;
+            }
+
             User user = new User()
             {
                 Id = Guid.NewGuid().ToString(),
@@ -46,11 +56,15 @@ namespace SharedTrip.Services
         public string GetUserId(string username, string password)
         {
             var hashPassword = ComputeHash(password);
-
-            var user = db.Users
+            var user = this.db.Users
                 .FirstOrDefault(u => u.Username == username && u.Password == hashPassword);
+            
+            if (user == null)
+            {
+                return null;
+            }
 
-            return user?.Id;
+            return user.Id;
         }
 
         public bool IsUsernameAvailable(string username)

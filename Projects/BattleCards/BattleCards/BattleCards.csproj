@@ -99,10 +99,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <ProjectReference Include="..\..\SharedTrip\SUS.HTTP\SUS.HTTP.csproj" />
     <ProjectReference Include="..\..\SharedTrip\SUS.MvcFramework.Tests\SUS.MvcFramework.Tests.csproj" />
     <ProjectReference Include="..\..\SharedTrip\SUS.MvcFramework\SUS.MvcFramework.csproj" />
