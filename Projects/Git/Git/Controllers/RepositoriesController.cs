@@ -33,7 +33,7 @@ namespace Git.Controllers
             if (!this.IsUserSignedIn())
             {
                 return this.Redirect("/Users/Login");
-            } 
+            }   
 
             return this.View();
         }

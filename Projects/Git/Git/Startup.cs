@@ -19,6 +19,7 @@
         {
             serviceCollection.Add<IUsersService, UsersService>();
             serviceCollection.Add<IRepositoriesService, RepositoriesService>();
+            serviceCollection.Add<ICommitsService, CommitsService>();
         }
     }
 }

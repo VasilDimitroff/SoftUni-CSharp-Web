@@ -55,5 +55,22 @@ namespace Git.Services
 
             return repositories;
         }
+
+        public RepositoryViewModel GetRepositoryById(string repositoryId)
+        {
+            var repository = db.Repositories
+             .Select(x => new RepositoryViewModel
+             {
+                 Id = x.Id,
+                 Name = x.Name,
+                 CommitsCount = x.Commits.Count(),
+                 CreatedOn = x.CreatedOn.ToString(),
+                 Owner = x.Owner.Username
+             })
+              .FirstOrDefault();
+
+
+            return repository;
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace Git.Services
     {
         public IEnumerable<RepositoryViewModel> GetAllPublic();
         public string Create(string userId, string name, string repositoryType);
+        public RepositoryViewModel GetRepositoryById(string repositoryId);
     }
 }
