@@ -23,7 +23,7 @@ namespace Git.Services
                 Id = Guid.NewGuid().ToString(),
                 Username = username,
                 Email = email,
-                Password = password
+                Password = ComputeHash(password)
             };
 
             db.Users.Add(user);
