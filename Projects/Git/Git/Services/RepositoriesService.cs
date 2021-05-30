@@ -67,7 +67,7 @@ namespace Git.Services
                  CreatedOn = x.CreatedOn.ToString(),
                  Owner = x.Owner.Username
              })
-              .FirstOrDefault();
+              .FirstOrDefault(x => x.Id == repositoryId);
 
 
             return repository;

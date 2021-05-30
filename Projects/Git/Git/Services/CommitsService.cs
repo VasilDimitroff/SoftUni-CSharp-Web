@@ -49,16 +49,13 @@ namespace Git.Services
             return commit.Id;
         }
 
-        public void Delete(string userId, string commitId)
+        public void Delete(string commitId)
         {
             var commit =
-                db.Commits.FirstOrDefault(x => x.CreatorId == userId && x.Id == commitId);
+                db.Commits.FirstOrDefault(x => x.Id == commitId);
 
-            if (commit != null)
-            {
                 db.Commits.Remove(commit);
                 db.SaveChanges();
-            }
         }
 
         public bool IsOwner(string userId, string commitId)

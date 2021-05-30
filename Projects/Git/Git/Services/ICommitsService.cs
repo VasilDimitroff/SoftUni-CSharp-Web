@@ -9,7 +9,7 @@ namespace Git.Services
     {
         public string Create(string repositoryId, string userId, string description);
         public IEnumerable<CommitViewModel> All(string userId);
-        public void Delete(string userId, string commitId);
+        public void Delete(string commitId);
         public bool IsOwner(string userId, string commitId);
     }
 }

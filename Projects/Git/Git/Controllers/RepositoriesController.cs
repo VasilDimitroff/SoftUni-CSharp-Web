@@ -18,11 +18,6 @@ namespace Git.Controllers
 
         public HttpResponse All()
         {
-            if (!this.IsUserSignedIn())
-            {
-                return this.Redirect("/Users/Login");
-            }
-
             var repositories = repositoriesService.GetAllPublic();
 
             return this.View(repositories);
@@ -45,6 +40,17 @@ namespace Git.Controllers
             {
                 return this.Redirect("/Users/Login");
             }
+
+            if (string.IsNullOrWhiteSpace(name) || name.Length < 3 || name.Length > 10)
+            {
+                return this.Error("Name must be between 3 and 10 characters long");
+            }
+
+            if (repositoryType.ToLower() != "public" && repositoryType.ToLower() != "private")
+            {
+                return this.Error("Please enter a valid repository type (Public or Private)");
+            }
+    
             var userId = this.GetUserId();
 
             repositoriesService.Create(userId, name, repositoryType);
