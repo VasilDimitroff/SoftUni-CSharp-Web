@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SUS.HTTP\SUS.HTTP.csproj" />
-    <ProjectReference Include="..\..\SUS.MvcFramework\SUS.MvcFramework.csproj" />
+    <ProjectReference Include="..\..\SoftUniServer\SUS.HTTP\SUS.HTTP.csproj" />
+    <ProjectReference Include="..\..\SoftUniServer\SUS.MvcFramework\SUS.MvcFramework.csproj" />
   </ItemGroup>
 
   <ItemGroup>
