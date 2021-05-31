@@ -39,6 +39,10 @@ namespace SharedTrip.Controllers
 
         public HttpResponse Register()
         {
+            if (IsUserSignedIn())
+            {
+                this.Redirect("/");
+            }
             return this.View();
         }
 
