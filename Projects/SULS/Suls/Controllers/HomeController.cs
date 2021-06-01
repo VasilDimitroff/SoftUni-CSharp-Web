@@ -14,9 +14,9 @@ namespace Suls.Controllers
         {
             if (IsUserSignedIn())
             {
-                var loggedViewModel = new LoggedIndexViewModel();
-                return this.View(loggedViewModel, "IndexLoggedIn");
+                return this.Redirect("/Problems/All");
             }
+
             var viewModel = new IndexGuestViewModel();
 
             return this.View(viewModel);

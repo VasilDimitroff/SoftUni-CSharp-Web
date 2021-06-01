@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Suls.ViewModels
 {
-    public class LoggedIndexViewModel
+    public class SubmissionIdViewModel
     {
-        public ICollection<ProblemIndexViewModel> Problems { get; set; }
+        public string Id { get; set; }
     }
 }

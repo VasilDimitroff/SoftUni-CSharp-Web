@@ -11,6 +11,7 @@ namespace SulsApp
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
             serviceCollection.Add<IUsersService, UsersService>();
+            serviceCollection.Add<IProblemsService, ProblemsService>();
         }
 
         public void Configure(List<Route> routeTable)
