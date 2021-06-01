@@ -11,12 +11,10 @@ namespace Suls.Services
     public class ProblemsService : IProblemsService
     {
         private readonly ApplicationDbContext db;
-        private readonly Random rand;
 
-        public ProblemsService(ApplicationDbContext db, Random rand)
+        public ProblemsService(ApplicationDbContext db)
         {
             this.db = db;
-            this.rand = rand;
         }
 
         public string Create(string name, int points)
@@ -45,7 +43,7 @@ namespace Suls.Services
                     {
                         SubmissionId = s.Id,
                         Name = s.Problem.Name,
-                        AchievedResult = rand.Next(0, s.Problem.Points),
+                        AchievedResult = s.AchievedResult,
                         CreatedOn = s.CreatedOn.ToString(),
                         MaxPoints = s.Problem.Points,
                         Username = s.User.Username
@@ -70,6 +68,20 @@ namespace Suls.Services
                 .ToList();
 
             return problems;
+        }
+
+        public ProblemIndexViewModel GetProblemById(string id)
+        {
+            var problem = db.Problems
+                .Select(x => new ProblemIndexViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Count = x.Submissions.Count()
+                })
+                .FirstOrDefault(x => x.Id == id);
+
+            return problem;
         }
     }
 }

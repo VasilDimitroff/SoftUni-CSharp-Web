@@ -10,6 +10,7 @@ namespace Suls.Services
         public IEnumerable<ProblemIndexViewModel> GetAll();
         public ProblemDetailsViewModel Details(string id);
         public string Create(string name, int points);
+        public ProblemIndexViewModel GetProblemById(string id);
 
     }
 }

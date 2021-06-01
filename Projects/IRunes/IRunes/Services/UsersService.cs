@@ -44,7 +44,7 @@ namespace IRunes.Services
             return user?.Username;
         }
 
-        public bool IsEmailAvailable(string email)
+        public bool IsEmailAvailable(string email) //v,b.dimibo@abv.g
         {
             return !db.Users.Any(x => x.Email == email);
         }
