@@ -3,6 +3,7 @@ using SUS.MvcFramework;
 using System.Collections.Generic;
 using Andreys.Data;
 using Microsoft.EntityFrameworkCore;
+using Andreys.Services;
 
 namespace Andreys.App
 {
@@ -10,6 +11,7 @@ namespace Andreys.App
     {
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
+            serviceCollection.Add<IUsersService, UsersService>();
         }
 
         public void Configure(List<Route> routeTable)

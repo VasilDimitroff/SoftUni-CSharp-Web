@@ -1,11 +1,11 @@
-﻿using Suls.Services;
+﻿using Andreys.Services;
 using SUS.HTTP;
 using SUS.MvcFramework;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Suls.Controllers
+namespace Andreys.Controllers
 {
     public class UsersController : Controller
     {
@@ -35,12 +35,6 @@ namespace Suls.Controllers
             }
 
             var userId = usersService.GetUserId(username, password);
-            
-            if (userId == null)
-            {
-                return this.Error("Username and password do not match!");
-            }
-
             SignIn(userId);
 
             return this.Redirect("/");
@@ -74,9 +68,9 @@ namespace Suls.Controllers
                 return this.Error("Username already taken!");
             }
 
-            if (string.IsNullOrWhiteSpace(username) || username.Length < 5 || username.Length > 20)
+            if (string.IsNullOrWhiteSpace(username) || username.Length < 4 || username.Length > 10)
             {
-                return this.Error("Username must be between 5 and 20 characters long!");
+                return this.Error("Username must be between 4 and 10 characters long!");
             }
 
             if (string.IsNullOrWhiteSpace(email))
@@ -97,7 +91,6 @@ namespace Suls.Controllers
             usersService.Create(username, email, password);
 
             return this.Redirect("/Users/Login");
-
         }
 
         public HttpResponse Logout()
@@ -105,7 +98,7 @@ namespace Suls.Controllers
             if (IsUserSignedIn())
             {
                 this.SignOut();
-            } 
+            }
 
             return this.Redirect("/");
         }

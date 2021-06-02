@@ -1,18 +1,17 @@
-﻿using BattleCards.Data;
-using BattleCards.Models;
+﻿using Andreys.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SharedTrip.Services
+namespace Andreys.Services
 {
     public class UsersService : IUsersService
     {
-        private readonly ApplicationDbContext db;
+        private readonly AndreysDbContext db;
 
-        public UsersService(ApplicationDbContext db)
+        public UsersService(AndreysDbContext db)
         {
             this.db = db;
         }
@@ -58,7 +57,7 @@ namespace SharedTrip.Services
             var hashPassword = ComputeHash(password);
             var user = this.db.Users
                 .FirstOrDefault(u => u.Username == username && u.Password == hashPassword);
-            
+
             if (user == null)
             {
                 return null;
@@ -78,7 +77,6 @@ namespace SharedTrip.Services
 
             return false;
         }
-
         private static string ComputeHash(string input)
         {
             var bytes = Encoding.UTF8.GetBytes(input);
