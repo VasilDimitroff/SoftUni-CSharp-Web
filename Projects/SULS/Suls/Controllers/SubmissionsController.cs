@@ -19,9 +19,6 @@ namespace Suls.Controllers
             this.problemsService = problemsService;
             this.submissionsService = submissionsService;
         }
-
-       
-
         public HttpResponse Create(string id)
         {
             var problem = problemsService.GetProblemById(id);
@@ -36,6 +33,11 @@ namespace Suls.Controllers
         [HttpPost]
         public HttpResponse Create(string problemId, string code)
         {
+            if (code.Length < 30 || code.Length > 800 || string.IsNullOrWhiteSpace(code))
+            {
+                return this.Error("Problem name must be between 5 and 20 characters long");
+            }
+
             submissionsService.Create(problemId, code, GetUserId());
 
             return this.Redirect("/");
