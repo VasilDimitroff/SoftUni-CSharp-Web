@@ -51,7 +51,7 @@ namespace Andreys.Controllers
                 return this.Error("Name must be between 4 and 20 characters long");
             }
 
-            if (input.Name.Length > 10)
+            if (input.Description.Length > 10)
             {
                 return this.Error("Description must be max 10 characters long");
             }
