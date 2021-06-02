@@ -35,6 +35,12 @@ namespace Andreys.Controllers
             }
 
             var userId = usersService.GetUserId(username, password);
+
+            if (userId == null)
+            {
+                return this.Redirect("/Users/Login");
+            }
+
             SignIn(userId);
 
             return this.Redirect("/");

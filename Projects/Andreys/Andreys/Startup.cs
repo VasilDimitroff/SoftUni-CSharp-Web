@@ -12,6 +12,7 @@ namespace Andreys.App
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
             serviceCollection.Add<IUsersService, UsersService>();
+            serviceCollection.Add<IProductsService, ProductsService>();
         }
 
         public void Configure(List<Route> routeTable)
