@@ -1,4 +1,5 @@
 ﻿using Panda.Data;
+using Panda.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,6 +84,17 @@ namespace Panda.Services
             var user = db.Users.Find(id);
 
             return user?.Username;
+        }
+
+        public IEnumerable<UsernameViewModel> GetAllUsers()
+        {
+            var users = db.Users.Select(x => new UsernameViewModel
+            {
+                Username = x.Username
+            }) 
+                .ToList();
+
+            return users;
         }
 
         private static string ComputeHash(string input)
