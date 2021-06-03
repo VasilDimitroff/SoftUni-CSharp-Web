@@ -77,6 +77,14 @@ namespace Panda.Services
 
             return false;
         }
+
+        public string GetUsername(string id)
+        {
+            var user = db.Users.Find(id);
+
+            return user?.Username;
+        }
+
         private static string ComputeHash(string input)
         {
             var bytes = Encoding.UTF8.GetBytes(input);

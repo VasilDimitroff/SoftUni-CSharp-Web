@@ -12,6 +12,7 @@ namespace Panda
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
             serviceCollection.Add<IUsersService, UsersService>();
+            serviceCollection.Add<IReceiptsService, ReceiptsService>();
         }
 
         public void Configure(List<Route> routeTable)
