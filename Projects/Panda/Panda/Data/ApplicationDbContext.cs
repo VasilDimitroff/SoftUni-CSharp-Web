@@ -13,6 +13,10 @@ namespace Panda.Data
         {
         }
 
+        public DbSet<User> Users { get; set; }
+        public DbSet<Receipt> Receipts { get; set; }
+        public DbSet<Package> Packages { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
