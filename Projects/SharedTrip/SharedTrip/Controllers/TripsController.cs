@@ -19,15 +19,20 @@ namespace SharedTrip.Controllers
 
         public HttpResponse All()
         {
+            if (!IsUserSignedIn())
+            {
+                this.Redirect("/Users/Login");
+            }
+
             var trips = tripsService.GetAll();
             return this.View(trips);
         }
 
         public HttpResponse Add()
         {
-            if (!this.IsUserSignedIn())
+            if (!IsUserSignedIn())
             {
-                return this.Redirect("/Users/Login");
+                this.Redirect("/Users/Login");
             }
 
             return this.View();
@@ -36,42 +41,65 @@ namespace SharedTrip.Controllers
         [HttpPost]
         public HttpResponse Add(TripInputModel input)
         {
-            if (!this.IsUserSignedIn())
+            if (!IsUserSignedIn())
             {
-                return this.Redirect("/Users/Login");
+                this.Redirect("/Users/Login");
             }
 
-            tripsService.Add(input);
+            if (string.IsNullOrWhiteSpace(input.StartPoint))
+            {
+                return this.Redirect("/Trips/Add");
+            }
 
+            if (string.IsNullOrWhiteSpace(input.EndPoint))
+            {
+                return this.Redirect("/Trips/Add");
+            }
+
+            if (string.IsNullOrWhiteSpace(input.DepartureTime))
+            {
+                return this.Redirect("/Trips/Add");
+            }
+
+            if (input.Seats < 2 || input.Seats > 6)
+            {
+                return this.Redirect("/Trips/Add");
+            }
+
+            if (string.IsNullOrWhiteSpace(input.Description) || input.Description.Length > 80)
+            {
+                return this.Redirect("/Trips/Add");
+            }
+
+            tripsService.Add(input.StartPoint, input.EndPoint, input.DepartureTime, input.ImagePath, input.Seats, input.Description);
             return this.Redirect("/Trips/All");
         }
 
         public HttpResponse Details(string tripId)
         {
-            if (!this.IsUserSignedIn())
+            if (!IsUserSignedIn())
             {
-                return this.Redirect("/Users/Login");
+                this.Redirect("/Users/Login");
             }
 
-            var trip = tripsService.GetDetails(tripId);
-
+            var trip = tripsService.Details(tripId);
             return this.View(trip);
         }
 
-        
         public HttpResponse AddUserToTrip(string tripId)
         {
-          
-            string userId = this.GetUserId();
-
-            if (!tripsService.IsUserInTrip(tripId, userId))
+            if (!IsUserSignedIn())
             {
-                tripsService.AddUserToTrip(tripId, userId);
-
-                return this.Redirect($"/Trips/All");
+                this.Redirect("/Users/Login");
             }
 
-            return this.Redirect($"/Trips/All");
+            if (tripsService.IsUserInTrip(GetUserId(), tripId))
+            {
+                return this.Redirect($"/Trips/Details?tripId={tripId}");
+            }
+
+            tripsService.AddUserToTrip(GetUserId(),tripId);
+            return this.Redirect("/Trips/All");
         }
     }
 }

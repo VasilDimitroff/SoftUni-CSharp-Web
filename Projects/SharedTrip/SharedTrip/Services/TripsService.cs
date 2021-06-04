@@ -17,93 +17,77 @@ namespace SharedTrip.Services
             this.db = db;
         }
 
-        public string Add(TripInputModel input)
+        public string Add(string startPoint, string endPoint, string departureTime, string imagePath, int seats, string description)
         {
-            DateTime depTime = DateTime
-                .ParseExact(input.DepartureTime, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
-
             var trip = new Trip
             {
                 Id = Guid.NewGuid().ToString(),
-                DepartureTime = depTime,
-                Description = input.Description,
-                EndPoint = input.EndPoint,
-                ImagePath = input.ImagePath,
-                StartPoint = input.StartPoint,
-                Seats = input.Seats
+                DepartureTime = DateTime.Parse(departureTime),
+                Description = description,
+                EndPoint = endPoint,
+                ImagePath = imagePath,
+                Seats = seats,
+                StartPoint = startPoint,
             };
 
-            this.db.Trips.Add(trip);
-            this.db.SaveChanges();
+            db.Add(trip);
+            db.SaveChanges();
 
             return trip.Id;
         }
 
-        public IEnumerable<TripViewModel> GetAll()
+        public void AddUserToTrip(string userId, string tripId)
         {
-            var trips = db.Trips.Select(trip => new TripViewModel
-            {
-                Id = trip.Id,
-                UsedSeats = trip.TripUsers.Count,
-                Seats = trip.Seats,
-                DepartureTime = trip.DepartureTime.ToString(),
-                EndPoint = trip.EndPoint,
-                StartPoint = trip.StartPoint
-            })
-                .ToList();
+            var user = db.Users.Find(userId);
+            var trip = db.Trips.Find(tripId);
 
-            return trips;
-        }
-
-        public TripViewModel GetDetails(string id)
-        {
-            TripViewModel trip = db.Trips
-                .Where(trip => trip.Id == id)
-                .Select(trip => new TripViewModel
-                {
-                    Id = trip.Id,
-                    UsedSeats = trip.TripUsers.Count,
-                    Seats = trip.Seats,
-                    DepartureTime = trip.DepartureTime.ToString(),
-                    EndPoint = trip.EndPoint,
-                    Description = trip.Description,
-                    StartPoint = trip.StartPoint,
-                    ImagePath = trip.ImagePath
-                })
-                 .ToList()
-                 .FirstOrDefault();
-
-            return trip;
-        }
-
-        public void AddUserToTrip(string tripId, string userId)
-        {
-            var trip = db.Trips.FirstOrDefault(x => x.Id == tripId);
-            var user = db.Users.FirstOrDefault(x => x.Id == userId);
-
-            UserTrip userTrip = new UserTrip
+            var userTrip = new UserTrip
             {
                 TripId = trip.Id,
-                Trip = trip,
-                UserId = user.Id,
-                User = user
+                UserId = user.Id
             };
 
             db.UsersTrips.Add(userTrip);
             db.SaveChanges();
         }
 
-        public bool IsUserInTrip(string tripId, string userId)
+        public TripViewModel Details(string tripId)
         {
-            var trip = db.Trips.FirstOrDefault(x => x.Id == tripId);
-            var user = db.Users.FirstOrDefault(x => x.Id == userId);
+            var trip = db.Trips
+                .Select(x => new TripViewModel
+                {
+                    AvailableSeats = x.Seats - x.TripUsers.Count(),
+                    DepartureTime = x.DepartureTime.ToString(),
+                    Description = x.Description,
+                    EndPoint = x.EndPoint,
+                    StartPoint = x.StartPoint,
+                    Id = x.Id,
+                    ImagePath = x.ImagePath
+                })
+                .FirstOrDefault(x => x.Id == tripId);
 
-            if (db.UsersTrips.Any(x => x.UserId == userId && x.TripId == tripId))
-            {
-                return true;
-            }
+            return trip;
+        }
 
-            return false;
+        public IEnumerable<AllTripsViewModel> GetAll()
+        {
+            var trips = db.Trips
+                .Select(x => new AllTripsViewModel
+                {
+                    AvailableSeats = x.Seats - x.TripUsers.Count(),
+                    DepartureTime = x.DepartureTime.ToString(),
+                    EndPoint = x.EndPoint,
+                    StartPoint = x.StartPoint,
+                    Id = x.Id,
+                })
+                .ToList();
+
+            return trips;
+        }
+
+        public bool IsUserInTrip(string userId, string tripId)
+        {
+           return db.UsersTrips.Any(x => x.UserId == userId && x.TripId == tripId);
         }
     }
 }

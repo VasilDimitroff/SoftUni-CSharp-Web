@@ -7,10 +7,10 @@ namespace SharedTrip.Services
 {
     public interface ITripsService
     {
-        public IEnumerable<TripViewModel> GetAll();
-        public string Add(TripInputModel input);
-        public TripViewModel GetDetails(string id);
-        public void AddUserToTrip(string tripId, string userId);
-        public bool IsUserInTrip(string tripId, string userId);
+        public string Add(string startPoint, string endPoint, string departureTime, string imagePath, int seats, string description);
+        public IEnumerable<AllTripsViewModel> GetAll();
+        public TripViewModel Details(string tripId);
+        public void AddUserToTrip(string userId, string tripId);
+        public bool IsUserInTrip(string userId, string tripId);
     }
 }

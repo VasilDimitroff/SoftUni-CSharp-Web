@@ -19,12 +19,22 @@ namespace SharedTrip.Controllers
 
         public HttpResponse Login()
         {
+            if (!IsUserSignedIn())
+            {
+                this.Redirect("/");
+            }
+
             return this.View();
         }
 
         [HttpPost]
         public HttpResponse Login(LoginInputModel inputModel)
         {
+            if (IsUserSignedIn())
+            {
+                this.Redirect("/");
+            }
+
             var user = this.usersService.GetUserId(inputModel.Username, inputModel.Password);
             this.SignIn(user);
 
@@ -43,12 +53,18 @@ namespace SharedTrip.Controllers
             {
                 this.Redirect("/");
             }
+
             return this.View();
         }
 
         [HttpPost]
         public HttpResponse Register(RegisterInputModel input)
         {
+            if (IsUserSignedIn())
+            {
+                this.Redirect("/");
+            }
+
             if (input.Username.Length < 5 || input.Username.Length > 20 || string.IsNullOrWhiteSpace(input.Username))
             {
                 return this.Error("Username must be between 5 and 20 characters and can't be empty or whitespace");
