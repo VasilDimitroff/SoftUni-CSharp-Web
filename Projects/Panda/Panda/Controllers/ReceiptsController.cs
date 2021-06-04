@@ -18,6 +18,11 @@ namespace Panda.Controllers
 
         public HttpResponse Index()
         {
+            if (!IsUserSignedIn())
+            {
+                return this.Redirect("/Users/Login");
+            }
+
             var receipts = receiptsService.GetAllByUserId(GetUserId());
             return this.View(receipts);
         }
