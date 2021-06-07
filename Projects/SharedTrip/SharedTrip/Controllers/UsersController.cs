@@ -36,6 +36,12 @@ namespace SharedTrip.Controllers
             }
 
             var user = this.usersService.GetUserId(inputModel.Username, inputModel.Password);
+
+            if (user == null)
+            {
+                return this.Error("Username and password do not match!");
+            }
+            
             this.SignIn(user);
 
             return this.Redirect("/Trips/All");
