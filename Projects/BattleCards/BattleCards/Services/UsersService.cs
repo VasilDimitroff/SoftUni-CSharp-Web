@@ -6,7 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SharedTrip.Services
+namespace BattleCards.Services
 {
     public class UsersService : IUsersService
     {

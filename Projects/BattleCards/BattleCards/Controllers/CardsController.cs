@@ -4,7 +4,6 @@ using SUS.HTTP;
 using SUS.MvcFramework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace BattleCards.Controllers
@@ -18,22 +17,11 @@ namespace BattleCards.Controllers
             this.cardsService = cardsService;
         }
 
-        public HttpResponse All()
-        {
-            if (!this.IsUserSignedIn())
-            {
-                return this.Redirect("/Users/Login");
-            }
-
-            var cards = cardsService.GetAllCards();
-            return this.View(cards);
-        }
-
         public HttpResponse Add()
         {
-            if (!this.IsUserSignedIn())
+            if (!IsUserSignedIn())
             {
-                return this.Redirect("/Users/Login");
+                return Redirect("/Users/Login");
             }
 
             return this.View();
@@ -42,79 +30,92 @@ namespace BattleCards.Controllers
         [HttpPost]
         public HttpResponse Add(CardInputModel input)
         {
-            if (!this.IsUserSignedIn())
+            if (!IsUserSignedIn())
             {
-                return this.Redirect("/Users/Login");
+                return Redirect("/Users/Login");
             }
 
-            if (string.IsNullOrEmpty(input.Name) || input.Name.Length < 5 || input.Name.Length > 15)
+            if (string.IsNullOrWhiteSpace(input.Name) || input.Name.Length < 5 || input.Name.Length > 15)
             {
-                return this.Error("Name must be between 5 and 15 characters long!");
+                return this.Error("Name should be betwen 5 and 15 characters long");
+            }
+
+            if (string.IsNullOrWhiteSpace(input.Description) || input.Description.Length > 200)
+            {
+                return this.Error("Description cannot be above 200 characters long");
             }
 
             if (string.IsNullOrWhiteSpace(input.Image))
             {
-                return this.Error("Please enter a valid URL!");
+                return this.Error("Please enter a valid image URL");
             }
 
             if (string.IsNullOrWhiteSpace(input.Keyword))
             {
-                return this.Error("Please enter a valid keyword!");
+                return this.Error("Keyword cannot be empty");
             }
 
             if (input.Attack < 0)
             {
-                return this.Error("Attack cannot be a negative number!");
+                return this.Error("Attack cannot be negative number");
             }
 
             if (input.Health < 0)
             {
-                return this.Error("Health cannot be a negative number!");
+                return this.Error("Health cannot be negative number");
             }
 
-            if (string.IsNullOrEmpty(input.Description) || input.Description.Length > 200)
+            cardsService.Create(GetUserId(), input.Name, input.Image, input.Keyword, input.Attack, input.Health, input.Description);
+
+            return Redirect("/Cards/All");
+        }
+
+        public HttpResponse All()
+        {
+            if (!IsUserSignedIn())
             {
-                return this.Error("Description cannot be empty or above 200 characters long!");
+                return Redirect("/Users/Login");
             }
 
-            var cardId = cardsService.Create(input.Name, input.Image, input.Keyword, input.Attack, input.Health, input.Description);
-            cardsService.AddToCollection(cardId, this.GetUserId());
-            
-            return this.Redirect("/Cards/All");
+            var cards = cardsService.All();
+            return this.View(cards);
+        }
+
+        public HttpResponse AddToCollection(int cardId)
+        {
+            if (!IsUserSignedIn())
+            {
+                return Redirect("/Users/Login");
+            }
+
+            cardsService.AddToCollection(GetUserId(), cardId);
+
+            return Redirect("/Cards/All");
+        }
+
+
+        public HttpResponse RemoveFromCollection(int cardId)
+        {
+            if (!IsUserSignedIn())
+            {
+                return Redirect("/Users/Login");
+            }
+
+            cardsService.RemoveFromCollection(GetUserId(), cardId);
+
+            return Redirect("/Cards/Collection");
         }
 
         public HttpResponse Collection()
         {
-            if (!this.IsUserSignedIn())
+            if (!IsUserSignedIn())
             {
-                return this.Redirect("/Users/Login");
+                return Redirect("/Users/Login");
             }
 
-            List<CardViewModel> cards = cardsService.GetCardsByUserId(this.GetUserId()).ToList();
-            return this.View(cards);
-        }
+            var collection = cardsService.Collection(GetUserId());
 
-      
-        public HttpResponse AddToCollection(int cardId)
-        {
-            if (!this.IsUserSignedIn())
-            {
-                return this.Redirect("/Users/Login");
-            }
-
-            cardsService.AddToCollection(cardId, this.GetUserId());
-            return this.Redirect("/Cards/All");
-        }
-
-        public HttpResponse RemoveFromCollection(int cardId)
-        {
-            if (!this.IsUserSignedIn())
-            {
-                return this.Redirect("/Users/Login");
-            }
-
-            cardsService.RemoveFromCollection(cardId, this.GetUserId());
-            return this.Redirect("/Cards/Collection");
+            return this.View(collection);
         }
     }
 }

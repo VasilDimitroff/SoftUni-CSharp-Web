@@ -1,4 +1,4 @@
-﻿using SharedTrip.Services;
+﻿using BattleCards.Services;
 using SUS.HTTP;
 using SUS.MvcFramework;
 using System;

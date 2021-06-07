@@ -2,9 +2,8 @@
 {
     using System.Collections.Generic;
     using BattleCards.Data;
-    using BattleCards.Services;
     using Microsoft.EntityFrameworkCore;
-    using SharedTrip.Services;
+    using BattleCards.Services;
     using SUS.HTTP;
     using SUS.MvcFramework;
 

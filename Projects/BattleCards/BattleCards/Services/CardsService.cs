@@ -10,101 +10,96 @@ namespace BattleCards.Services
 {
     public class CardsService : ICardsService
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly ApplicationDbContext db;
 
-        public CardsService(ApplicationDbContext dbContext)
+        public CardsService(ApplicationDbContext db)
         {
-            this.dbContext = dbContext;
+            this.db = db;
         }
 
-        public void AddToCollection(int cardId, string userId)
+        public void AddToCollection(string userId, int cardId)
         {
-            var card = dbContext.Cards.Find(cardId);
-            var user = dbContext.Users.Find(userId);
-
-            if (dbContext.UsersCards.Any(x => x.UserId == user.Id && x.CardId == card.Id))
+            if (db.UsersCards.Any(x => x.UserId == userId && x.CardId == cardId))
             {
                 return;
             }
 
-            var userCard = new UserCard()
+            var userCard = new UserCard
             {
-                Card = card,
-                User = user,
-                CardId = card.Id,
-                UserId = user.Id
+                CardId = cardId,
+                UserId = userId
             };
 
-            dbContext.UsersCards.Add(userCard);
-            dbContext.SaveChanges();
+            db.UsersCards.Add(userCard);
+            db.SaveChanges();
         }
 
-        public int Create(string name, string imagePath, string keyword, int attack, int health, string description)
+        public IEnumerable<CollectionCardViewModel> All()
         {
-            Card card = new Card
+            var allCards = db.Cards
+                .Select(x => new CollectionCardViewModel
+                {
+                    Id = x.Id,
+                    Attack = x.Attack,
+                    Description = x.Description,
+                    Health = x.Health,
+                    ImagePath = x.ImageUrl,
+                    Keyword = x.Keyword,
+                    Name = x.Name
+                })
+                .ToList();
+
+            return allCards;
+        }
+
+        public IEnumerable<CollectionCardViewModel> Collection(string userId)
+        {
+            var allCards = db.Cards
+                .Where(x => x.CardUsers.Any(u => u.UserId == userId))
+               .Select(x => new CollectionCardViewModel
+               {
+                   Id = x.Id,
+                   Attack = x.Attack,
+                   Description = x.Description,
+                   Health = x.Health,
+                   ImagePath = x.ImageUrl,
+                   Keyword = x.Keyword,
+                   Name = x.Name
+               })
+               .ToList();
+
+            return allCards;
+        }
+
+        public int Create(string userId, string name, string imageUrl, string keyword, int attack, int health, string description)
+        {
+            var card = new Card()
             {
-                Name = name,
-                ImageUrl = imagePath,
-                Keyword = keyword,
                 Attack = attack,
+                Description = description,
                 Health = health,
-                Description = description
+                ImageUrl = imageUrl,
+                Keyword = keyword,
+                Name = name,
             };
 
-            dbContext.Cards.Add(card);
-            dbContext.SaveChanges();
+            db.Cards.Add(card);
+            db.SaveChanges();
+
+            var user = db.Users.Find(userId);
+            //var createdCard = db.Cards.OrderByDescending(x => x.Id).FirstOrDefault();
+
+            AddToCollection(user.Id, card.Id);
 
             return card.Id;
         }
 
-        public IEnumerable<CardViewModel> GetAllCards()
+        public void RemoveFromCollection(string userId, int cardId)
         {
-            var cards = dbContext.Cards.Select(x => new CardViewModel
-            {
-                Attack = x.Attack,
-                Description = x.Description,
-                Id = x.Id,
-                Health = x.Health,
-                Image = x.ImageUrl,
-                Keyword = x.Keyword,
-                Name = x.Name
-            })
-                .ToList();
+            var cardToRemove = db.UsersCards.FirstOrDefault(x => x.UserId == userId && x.CardId == cardId);
 
-            return cards;
-        }
-
-        public IEnumerable<CardViewModel> GetCardsByUserId(string userId)
-        {
-            var cards = dbContext.UsersCards
-                .Where(x => x.User.Id == userId)
-                .Select(x => new CardViewModel
-                    {
-                        Attack = x.Card.Attack,
-                        Description = x.Card.Description,
-                        Id = x.Card.Id,
-                        Health = x.Card.Health,
-                        Image = x.Card.ImageUrl,
-                        Keyword = x.Card.Keyword,
-                        Name = x.Card.Name
-                    })
-               .ToList();
-
-            return cards;
-        }
-
-        public void RemoveFromCollection(int cardId, string userId)
-        {
-            var cardToRemove = 
-                dbContext.UsersCards
-                .Where(c => c.Card.Id == cardId && c.User.Id == userId)
-                .FirstOrDefault();
-
-            if (cardToRemove != null)
-            {
-                dbContext.UsersCards.Remove(cardToRemove);
-                dbContext.SaveChanges();
-            }
+            db.UsersCards.Remove(cardToRemove);
+            db.SaveChanges();
         }
     }
 }

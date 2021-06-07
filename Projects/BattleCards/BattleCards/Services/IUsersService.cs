@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SharedTrip.Services
+namespace BattleCards.Services
 {
     public interface IUsersService
     {

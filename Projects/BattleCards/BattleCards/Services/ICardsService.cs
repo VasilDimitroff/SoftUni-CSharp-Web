@@ -7,10 +7,10 @@ namespace BattleCards.Services
 {
     public interface ICardsService
     {
-        public IEnumerable<CardViewModel> GetCardsByUserId(string userId);
-        public int Create(string name, string imagePath, string keyword, int attack, int health, string description);
-        public IEnumerable<CardViewModel> GetAllCards();
-        public void AddToCollection(int cardId, string userId);
-        public void RemoveFromCollection(int cardId, string userId);
+        public int Create(string userId, string name, string imageUrl, string keyword, int attack, int health, string description);
+        public void AddToCollection(string userId, int cardId);
+        public void RemoveFromCollection(string userId, int cardId);
+        public IEnumerable<CollectionCardViewModel> Collection(string userId);
+        public IEnumerable<CollectionCardViewModel> All();
     }
 }
