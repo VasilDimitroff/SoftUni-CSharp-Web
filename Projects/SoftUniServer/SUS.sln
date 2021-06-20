@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Andreys", "..\Andreys\Andre
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedTrip", "..\SharedTrip\SharedTrip\SharedTrip.csproj", "{DE08FA51-ADF5-4563-B797-D6128EE4F27E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarShop", "..\CarShop\CarShop\CarShop.csproj", "{43ABEDB6-496C-4679-AD18-C2A494F57ABC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{DE08FA51-ADF5-4563-B797-D6128EE4F27E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE08FA51-ADF5-4563-B797-D6128EE4F27E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE08FA51-ADF5-4563-B797-D6128EE4F27E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43ABEDB6-496C-4679-AD18-C2A494F57ABC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43ABEDB6-496C-4679-AD18-C2A494F57ABC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43ABEDB6-496C-4679-AD18-C2A494F57ABC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43ABEDB6-496C-4679-AD18-C2A494F57ABC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{17080E5E-4359-42D3-8A1F-D6399965F56D} = {D058481A-B479-499D-ADB8-9108A526A334}
 		{9B817B8D-651F-420D-AD26-E924C6F108CD} = {D058481A-B479-499D-ADB8-9108A526A334}
 		{DE08FA51-ADF5-4563-B797-D6128EE4F27E} = {D058481A-B479-499D-ADB8-9108A526A334}
+		{43ABEDB6-496C-4679-AD18-C2A494F57ABC} = {D058481A-B479-499D-ADB8-9108A526A334}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1DE8A1FE-A195-4206-8DF0-E23F1C7707C8}
